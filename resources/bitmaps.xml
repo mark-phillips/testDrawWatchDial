@@ -1,0 +1,15 @@
+<resources>
+    <bitmap id="LauncherIcon" filename="images/icon.png" />
+    <bitmap id="steps_id" filename="images/yellowsteps.png" >
+        <palette>
+          <color>FFAA00</color>
+          <color>000000</color>
+        </palette>
+    </bitmap>
+    <bitmap id="battery_id" filename="images/yellowbattery.png" >
+        <palette>
+          <color>FFAA00</color>
+          <color>000000</color>
+        </palette>
+    </bitmap>
+</resources>
