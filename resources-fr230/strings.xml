@@ -1,0 +1,4 @@
+<resources>
+        <string id="id_device_type">semiround</string>
+        <string id="id_icon_size">small</string>        
+</resources>

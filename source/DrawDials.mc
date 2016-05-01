@@ -31,6 +31,7 @@ class DrawDialsFace extends Ui.WatchFace
     var MAX_DIALS = 2;
     var screen_width = 0 ;
     var screen_height = 0 ;
+    var icon_size = "large";
     //! Constructor
     function initialize()
     {
@@ -42,6 +43,7 @@ class DrawDialsFace extends Ui.WatchFace
         font = Ui.loadResource(Rez.Fonts.id_font_black_diamond);
         battery_icon = Ui.loadResource(Rez.Drawables.battery_id);
         steps_icon = Ui.loadResource(Rez.Drawables.steps_id);
+        icon_size = Ui.loadResource(Rez.Strings.id_icon_size);
     }
 
     function onShow()
@@ -229,66 +231,26 @@ class DrawDialsFace extends Ui.WatchFace
     }
 
     // ============================================================
-    // Draw segment from center to circle which is 50 pixels out
-    // (so that the screen boundary rounds off the triangle)
-    // ============================================================
-    function drawSegment(dc, startmin, endmin, colour)
-    {
-        var startangle = (180- startmin * 6 ) * deg2rad;
-        var endangle = (180- endmin * 6 )  * deg2rad;
-        var xcenter = screen_width/2;
-        var ycenter = screen_height/2;
-        var startx = xcenter + (50+ radius) * Math.sin(startangle);
-        var starty = ycenter + (50+ radius) * Math.cos(startangle);
-        var   endx = xcenter + (50+ radius) * Math.sin(  endangle);
-        var   endy = ycenter + (50+ radius) * Math.cos(  endangle);
-        // Map out the coordinates
-        var coords = [ [radius,radius], [startx, starty], [endx,endy] ];
-
-        // Draw the polygon
-        dc.setColor(colour,colour);
-        dc.fillPolygon(coords);
-    }
-
-    // ============================================================
     // Function to rebuild the background which can be saved to png
     // ============================================================
-    function drawFenix3Backgroundv1(dc)
+    function drawFenix3BackgroundElegant(dc)
     {
         drawCommonBackground(dc);
 
         // ============================================================
         // Draw the minute marks
 
-        //dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,0,2,null,8);
         drawWedge(dc, 0, 0.51, 0, 8, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,5,2,null,25);
         drawWedge(dc, 5, 0.51, 0, 26, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,10,2,null,25);
         drawWedge(dc,10, 0.51, 0, 26, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,15,2,null,8);
         drawWedge(dc,15, 0.51, 0, 8, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,20,2,null,25);
         drawWedge(dc,20, 0.51, 0, 26, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,25,2,null,25);
         drawWedge(dc,25, 0.51, 0, 26, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,30,2,null,8);
         drawWedge(dc,30, 0.51, 0, 8, Gfx.COLOR_WHITE);
-        //drawWedge(dc,10, 0.5, 5, 22, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,35,2,null,25);
         drawWedge(dc,35, 0.51, 0, 26, Gfx.COLOR_WHITE);
-      //  drawWedge(dc,10, 0.5, 5, 22, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,40,2,null,25);
         drawWedge(dc,40, 0.51, 0, 26, Gfx.COLOR_WHITE);
-    //    drawWedge(dc,10, 0.5, 5, 22, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,45,2,null,8);
         drawWedge(dc,45, 0.51, 0, 8, Gfx.COLOR_WHITE);
-  //      drawWedge(dc,10, 0.5, 5, 22, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,50,2,null,25);
         drawWedge(dc,50, 0.51, 0, 26, Gfx.COLOR_WHITE);
-//        drawWedge(dc,10, 0.5, 5, 22, Gfx.COLOR_WHITE);
-        //drawWedgeold(dc,55,2,null,25);
         drawWedge(dc,55, 0.51, 0, 26, Gfx.COLOR_WHITE);
 
         var c;
@@ -307,34 +269,10 @@ class DrawDialsFace extends Ui.WatchFace
         // Draw the steps icon
 //        dc.drawBitmap(width* 0.70+4, height*.65,steps);
     }
-    function drawWedgeold(dc, minute ,tickwidth, inset, length )
-    {
-        var end = radius-length;
-        var xx, xx2, yy, yy2,kxx,kyy,kxx2,kyy2, angle;
-        var xcenter = screen_width/2;
-        var ycenter = screen_height/2;
-        angle = 180 + minute * -6;
-        var tickwidth2=tickwidth;
-        var tickwidth3=1;
-        var anglePI2 = Math.PI*(angle-tickwidth2)/180;
-        var anglePI3 = Math.PI*(angle+tickwidth3)/180;
-        var cosPI2 = Math.cos(anglePI2);
-        var cosPI3 = Math.cos(anglePI3);
-        var sinPI2 = Math.sin(anglePI2);
-        var sinPI3 = Math.sin(anglePI3);
-        yy  = 1*radius * (1+cosPI2 );
-        yy2 = 1*radius * (1+cosPI3);
-        xx  = 1* radius * (1+sinPI2 );
-        xx2 = 1* radius * (1+sinPI3);
-        kyy  = 1*radius + end * (cosPI2 );
-        kyy2 = 1*radius + end * (cosPI3);
-        kxx  = 1* radius + end * (sinPI2);
-        kxx2 = 1* radius + end * (sinPI3);
-        dc.fillPolygon([[kxx, kyy], [xx, yy] ,[xx2,yy2],[kxx2, kyy2]]);
-    }
     // ============================================================
     // Function to rebuild the background which can be saved to png
     // ============================================================
+
     function drawCommonBackground(dc)
     {
 //        radius = height/2;
@@ -343,13 +281,19 @@ class DrawDialsFace extends Ui.WatchFace
         // Draw the Battery icon
         var batt_icon_x = screen_width*0.24;
         var batt_icon_y = screen_height*0.24;
+
+        if (icon_size.equals("small") ) {
+            batt_icon_x = screen_width*0.28;
+            batt_icon_y = screen_height*0.23;
+        }
+
         dc.setColor( Gfx.COLOR_GREEN,Gfx.COLOR_GREEN);
         dc.drawBitmap(   batt_icon_x, batt_icon_y, battery_icon);
  //       dc.drawRectangle(batt_icon_x-1 , batt_icon_y-2 ,30, 22);
 
         // ============================================================
         // Draw the step icon
-        var step_icon_x = screen_width*0.66;
+        var step_icon_x = screen_width*0.65;
         var step_icon_y = screen_height*.69;
         dc.drawBitmap(   step_icon_x, step_icon_y, steps_icon);
 //        dc.drawRectangle(step_icon_x-1, step_icon_y-2, 25, 22); // colour feet
@@ -358,12 +302,14 @@ class DrawDialsFace extends Ui.WatchFace
         // Draw the battery arc
         var bar_width = 8;
         drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width, 88,88, Gfx.COLOR_YELLOW, CLOCKWISE);
-        dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_YELLOW);
+
+        // ============================================================
+        // Draw the notification arc
+        drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width, 87,89, Gfx.COLOR_YELLOW, COUNTERCLOCKWISE);
 
         // ============================================================
         // Draw the move arc
         drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width, 88,179, Gfx.COLOR_YELLOW, CLOCKWISE);
-        dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_YELLOW);
 
         // ============================================================
         // Draw the activity arc
@@ -389,69 +335,11 @@ class DrawDialsFace extends Ui.WatchFace
 
         }
 
-
-        // ============================================================
-        // Draw the logo
-//        dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
-//        dc.drawText(width* 0.77  , height*.19,
-//                    Gfx.FONT_XTINY, deviceName, Gfx.TEXT_JUSTIFY_RIGHT);
-//                    //Gfx.FONT_XTINY, "fēnix 3", Gfx.TEXT_JUSTIFY_RIGHT);
-//        dc.drawText(width* 0.77  , height*.19 + 14,
-//                    Gfx.FONT_XTINY, "10 ATM", Gfx.TEXT_JUSTIFY_RIGHT);
     }
-    function drawFenix3Backgroundv2(dc)
+    function drawFenix3BackgroundMacho(dc)
     {
         drawCommonBackground(dc);
 
-        // ============================================================
-        // Draw the Battery icon
-        var batt_icon_x = screen_width*0.24;
-        var batt_icon_y = screen_height*0.24;
-        dc.setColor( Gfx.COLOR_GREEN,Gfx.COLOR_GREEN);
-        dc.drawBitmap(   batt_icon_x, batt_icon_y, battery_icon);
- //       dc.drawRectangle(batt_icon_x-1 , batt_icon_y-2 ,30, 22);
-
-        // ============================================================
-        // Draw the step icon
-        var step_icon_x = screen_width*0.66;
-        var step_icon_y = screen_height*.69;
-        dc.drawBitmap(   step_icon_x, step_icon_y, steps_icon);
-//        dc.drawRectangle(step_icon_x-1, step_icon_y-2, 25, 22); // colour feet
-
-        // ============================================================
-        // Draw the battery arc
-        var bar_width = 8;
-        drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width, 88,88, Gfx.COLOR_YELLOW, CLOCKWISE);
-        dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_YELLOW);
-
-        // ============================================================
-        // Draw the move arc
-        drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width, 88,179, Gfx.COLOR_YELLOW, CLOCKWISE);
-        dc.setColor(Gfx.COLOR_YELLOW, Gfx.COLOR_YELLOW);
-
-        // ============================================================
-        // Draw the activity arc
-        drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width ,  88, 179, Gfx.COLOR_YELLOW, COUNTERCLOCKWISE);
-        drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width/3, 88,179, Gfx.COLOR_BLUE, COUNTERCLOCKWISE);
-        dc.setColor(Gfx.COLOR_BLUE, Gfx.COLOR_BLUE);
-        drawWedge(dc, 15.3 , 0.7 , 0, 8, Gfx.COLOR_BLUE);
-        drawWedge(dc, 29.7 , 0.7 , 0, 8, Gfx.COLOR_BLUE);
-
-        // ============================================================
-        // Draw the Move icon
-        var sleep_move_icon_x = screen_width*.23;
-        var sleep_move_icon_y = screen_height*.70;
-        if (debug )
-        {
-            var dimensions =  dc.getTextDimensions("Move!",Gfx.FONT_XTINY);
-            dc.setColor(Gfx.COLOR_DK_RED,Gfx.COLOR_DK_RED);
-            dc.fillRoundedRectangle(sleep_move_icon_x, sleep_move_icon_y ,
-                                    dimensions[0]+5, dimensions[1]-2, 4);
-            dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
-            dc.drawText(sleep_move_icon_x+3, sleep_move_icon_y-2 ,
-                        Gfx.FONT_XTINY, "Move!", Gfx.TEXT_JUSTIFY_LEFT);
-
-        }
 
 
         // ============================================================
@@ -507,13 +395,15 @@ class DrawDialsFace extends Ui.WatchFace
         // Display the dials
         if (counter == 0)
         {
-          drawFenix3Backgroundv1(dc);
+          drawFenix3BackgroundElegant(dc);
+          counter=1;
         }
-        if (counter == 1)
+        else if (counter == 1)
         {
-          drawFenix3Backgroundv1(dc);
+          drawFenix3BackgroundMacho(dc);
+          counter=0;
         }
-        counter++;
+
     }
 }
 

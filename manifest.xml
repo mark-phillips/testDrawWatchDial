@@ -6,7 +6,6 @@
 		launcherIcon="LauncherIcon" name="AppName" type="watchface">
 
 		<iq:products>
-			<iq:product id="d2bravo" />
 			<iq:product id="fenix3" />
 			<iq:product id="fr230" />
 		</iq:products>
