@@ -32,6 +32,11 @@ class DrawDialsFace extends Ui.WatchFace
     var screen_width = 0 ;
     var screen_height = 0 ;
     var icon_size = "large";
+    var SCREEN_UNKNOWN = -1;
+    var SCREEN_ROUND = 0;
+    var SCREEN_SEMI_ROUND = 1;
+    var screen_type = SCREEN_UNKNOWN;
+
     //! Constructor
     function initialize()
     {
@@ -60,10 +65,17 @@ class DrawDialsFace extends Ui.WatchFace
         var angle  = ( min / 60.0) * Math.PI * 2;
         drawTriangle(dc, angle, width, inner, length,colour);
     }
+
+    function adjustSemiRound(xvalue) {
+        if (screen_type == SCREEN_SEMI_ROUND) {
+            return (1.0 * xvalue * (170.0 / 218.0));
+        }
+        return xvalue;
+    }
     function drawTriangle(dc, angle, width, inner, length, colour)
     {
         // Map out the coordinates
-        var coords = [ [0,-inner], [-(width/2), -length], [width/2, -length] ];
+        var coords = [ [0,-inner], [-(adjustSemiRound(width)/2), -length], [adjustSemiRound(width)/2, -length] ];
         var result = new [3];
         var centerX = screen_width/2;
         var centerY = screen_height /2;
@@ -117,7 +129,7 @@ class DrawDialsFace extends Ui.WatchFace
     function drawBlock(dc, angle, width, inner, length, colour)
     {
         // Map out the coordinates
-        var coords = [ [-(width/2),-inner], [-(width/2), -length], [width/2, -length], [width/2, -inner] ];
+        var coords = [ [-(adjustSemiRound(width)/2),-inner], [-(adjustSemiRound(width)/2), -length], [adjustSemiRound(width)/2, -length], [adjustSemiRound(width)/2, -inner] ];
         var result = new [4];
         var centerX = radius;
         var centerY = radius;
@@ -164,6 +176,7 @@ class DrawDialsFace extends Ui.WatchFace
         var curAngle;
         direction = direction*-1;
         var ptCnt = 30;
+        thickness = adjustSemiRound(thickness);
 
         if(angle > 0f){
           var pts = new [ptCnt*2+2];
@@ -203,6 +216,9 @@ class DrawDialsFace extends Ui.WatchFace
     {
         var center_angle = 180f -min * 6;
         width = width * 6; // (width measured in minutes i.e. 6deg)
+        insetFromRad = adjustSemiRound(insetFromRad);
+        length = adjustSemiRound(length);
+
         var startangle = (center_angle-width/2) ;
         var endangle = (center_angle+width/2) ;
         var outside_radius = radius - insetFromRad;
@@ -380,8 +396,22 @@ class DrawDialsFace extends Ui.WatchFace
         screen_width = dc.getWidth();
         screen_height = dc.getHeight();
         radius = screen_height/2;
-        if (screen_height > screen_width) { // choose smallest dimension for radius
-            radius = screen_width/2;
+
+        if (screen_type == SCREEN_UNKNOWN) {
+          screen_width = dc.getWidth();
+          screen_height = dc.getHeight();
+          if (screen_width == 218 and screen_height == 218) {
+            screen_type = SCREEN_ROUND;
+          }
+          else if (screen_width == 215 and screen_height == 180) {
+            screen_type = SCREEN_SEMI_ROUND;
+          }
+          if (screen_height > screen_width) { // choose smallest dimension for radius
+               radius = screen_width/2;
+        }
+          else {
+            radius = screen_height/2;
+          }
         }
         if (counter >= MAX_DIALS) { counter = 0; }
 
