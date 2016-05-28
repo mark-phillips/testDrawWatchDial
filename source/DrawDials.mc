@@ -320,8 +320,10 @@ class DrawDialsFace extends Ui.WatchFace
         drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width, 88,88, Gfx.COLOR_YELLOW, CLOCKWISE);
 
         // ============================================================
-        // Draw the notification arc
-        drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width, 87,89, Gfx.COLOR_YELLOW, COUNTERCLOCKWISE);
+        drawPolygonArc(dc, screen_width/2, screen_height/2, screen_height/2, bar_width, 86,88, Gfx.COLOR_YELLOW, COUNTERCLOCKWISE);
+        // Draw gaps
+        for (var c=0; c<5; c++) { drawLineFromMin(dc,4.8+c,6,radius-10,radius,Gfx.COLOR_BLACK); }
+        for (var c=0; c<5; c++) { drawLineFromMin(dc,9.8+c,6,radius-10,radius,Gfx.COLOR_BLACK); }
 
         // ============================================================
         // Draw the move arc

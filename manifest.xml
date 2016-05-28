@@ -7,7 +7,7 @@
 
 		<iq:products>
 			<iq:product id="fenix3" />
-			<iq:product id="fr230" />
+			<iq:product id="fr630" />
 		</iq:products>
 
 		<iq:permissions>
